@@ -1,10 +1,9 @@
 import os
 from redvid import Downloader
-
+import shutil
 import render as r
 import reddit_scraper as rs
 import uploadYT as yt
-
 import config
 
 subreddit = config.subreddit  # subreddit wanted here
@@ -14,7 +13,7 @@ login_info_text = open('reddit_login_info.txt', mode='r').read().split(',')
 directory = "temp_clips/"
 
 for file in os.listdir(directory):
-    os.remove(directory + file)
+    shutil.rmtree(directory + file)
 
 vid_list = rs.reddit_scraper(subreddit)
 
