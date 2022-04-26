@@ -1,8 +1,9 @@
 from moviepy.editor import *
 from skimage.filters import gaussian
-
+from datetime import date
 import config
 
+date_downloaded = date.today().strftime("%m-%d-%y")
 
 def blur(image):
     """ Returns a blurred (radius=2 pixels) version of the image """
@@ -14,7 +15,7 @@ def render(directory,
            output_name,
            resolution):  # dir and names are strings, resolution is a tuple
 
-    blur = config.video['blur']
+    #blur = config.video['blur']
     
     clip_dir = directory + clip_name
     main_clip = VideoFileClip(clip_dir)
@@ -24,20 +25,20 @@ def render(directory,
         print(f"clip is very close to 9:16!\n"
               f"exact: {ratio}\n"
               f"theoretical: 0.5625")
-        os.rename(directory + "main_clip.mp4", directory + "output.mp4")
+        os.rename(directory + '{date_downloaded}/{submission.name}.mp4', directory + '{date_downloaded}.mp4')
         return 1
 
     """ Make bg be a blurred and darkened version of clip """
-    bg = VideoFileClip(clip_dir).resize(resolution)
-    bg = bg.fx(vfx.colorx, 0.5)
-    if blur:
-        bg = bg.fl_image(blur)
+    # bg = VideoFileClip(clip_dir).resize(resolution)
+    # bg = bg.fx(vfx.colorx, 0.5)
+    # if blur:
+    #     bg = bg.fl_image(blur)
     """"""
 
     main_clip = main_clip.resize(width=resolution[0])  # resize clip to fit screen
     main_clip = main_clip.set_start(0)
 
-    video = CompositeVideoClip([bg, main_clip.set_position("center", "center")])  # combine bg and clip with centering
+    video = CompositeVideoClip([main_clip.set_position("center", "center")])  # combine bg and clip with centering
     video.write_videofile(directory + output_name, audio_codec='aac')  # render clip given directory
     return 0
 
